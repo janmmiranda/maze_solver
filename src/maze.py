@@ -91,3 +91,54 @@ class Maze():
             elif choice == "d":
                 curr.hasBottomWall = False
                 self.break_walls(col, row + 1)
+    
+    def reset_cells_visited(self):
+        for col in range(self.numCols):
+            for row in range(self.numRows):
+                self.cells[col][row].visited = False
+
+    def solve(self):
+        return self.solveR(0, 0)
+
+    def solveR(self, col, row):
+        self._animate()
+        curr = self.cells[col][row]
+        curr.visited = True
+
+        if self.numCols - 1 == col and self.numRows - 1 == row:
+            return True
+        else:
+            leftNeighbor = self.cells[col - 1][row] if col - 1 >= 0 and not self.cells[col - 1][row].visited and not curr.hasLeftWall else None
+            rightNeighbor = self.cells[col + 1][row] if col + 1 < self.numCols and not self.cells[col + 1][row].visited and not curr.hasRightWall else None
+            upNeighbor = self.cells[col][row - 1] if row - 1 >= 0  and not self.cells[col][row - 1].visited and not curr.hasTopWall else None
+            downNeighbor = self.cells[col][row + 1] if row + 1 < self.numRows and not self.cells[col][row + 1].visited and not curr.hasBottomWall else None
+
+            if leftNeighbor:
+                curr.draw_move(leftNeighbor)
+                temp = self.solveR(col - 1, row)
+                if temp:
+                    return True
+                else:
+                   curr.draw_move(leftNeighbor, True) 
+            if rightNeighbor:
+                curr.draw_move(rightNeighbor)
+                temp = self.solveR(col + 1, row)
+                if temp:
+                    return True
+                else:
+                   curr.draw_move(rightNeighbor, True) 
+            if upNeighbor:
+                curr.draw_move(upNeighbor)
+                temp = self.solveR(col, row - 1)
+                if temp:
+                    return True
+                else:
+                   curr.draw_move(upNeighbor, True) 
+            if downNeighbor:
+                curr.draw_move(downNeighbor)
+                temp = self.solveR(col, row + 1)
+                if temp:
+                    return True
+                else:
+                   curr.draw_move(downNeighbor, True) 
+        return False
