@@ -12,6 +12,7 @@ class Cell():
         self.hasRightWall = True
         self.hasTopWall = True
         self.hasBottomWall = True
+        self.visited = False
 
     def __repr__(self) -> str:
         return f"Cell(x1: {self.x1}, y1: {self.y1}, x2: {self.x2}, y2: {self.y2}, hasLeft: {self.hasLeftWall}, hasRight: {self.hasRightWall}, hasTop: {self.hasTopWall}, hasBottom: {self.hasBottomWall})"
@@ -23,18 +24,18 @@ class Cell():
         self.y1 = y1
         self.x2 = x2
         self.y2 = y2
-        if self.hasLeftWall:
-            line = Line(Point(self.x1, self.y1), Point(self.x1, self.y2))
-            self.win.drawLine(line, "black")
-        if self.hasRightWall:
-            line = Line(Point(self.x2, self.y1), Point(self.x2, self.y2))
-            self.win.drawLine(line, "black")
-        if self.hasTopWall:
-            line = Line(Point(self.x1, self.y1), Point(self.x2, self.y1))
-            self.win.drawLine(line, "black")
-        if self.hasBottomWall:
-            line = Line(Point(self.x1, self.y2), Point(self.x2, self.y2))
-            self.win.drawLine(line, "black")
+       
+        line = Line(Point(self.x1, self.y1), Point(self.x1, self.y2))
+        self.win.drawLine(line, "black" if self.hasLeftWall else "#dcdcdc")
+    
+        line = Line(Point(self.x2, self.y1), Point(self.x2, self.y2))
+        self.win.drawLine(line, "black" if self.hasRightWall else "#dcdcdc")
+    
+        line = Line(Point(self.x1, self.y1), Point(self.x2, self.y1))
+        self.win.drawLine(line, "black" if self.hasTopWall else "#dcdcdc")
+    
+        line = Line(Point(self.x1, self.y2), Point(self.x2, self.y2))
+        self.win.drawLine(line, "black" if self.hasBottomWall else "#dcdcdc")
 
     def draw_move(self, to_cell, undo=False):
         color = "red" if not undo else "gray"
